@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import re
+import unicodedata
 
 with open('pop_wealth_2010.json', 'r') as f:
      read_data = f.read()
@@ -39,17 +40,45 @@ for name in names:
 	if hit is not None:
 		abbrs.append(hit.group(0)[3:-1])
 
-abbrs = list(set(abbrs))
-print abbrs
-
-leg_state_hash = {}
 states = pop_wealth_df['State']
+state_strings = map(str, states.values)
+state_strings.sort()
 
-for state in states:
-	if leg_state_hash.get(state) is None:
-		leg_state_hash[state] = []
-		
+abbrs = list(set(abbrs))
+abbrs = map(str, abbrs)
+abbrs.sort()
+abbrs.remove('DC')
+abbrs.remove('AS')
+state_strings.remove('District of Columbia')
+abbrs.remove('Guam')
 
-print len(leg_state_hash)
+# Cleans up data for dict, maps abbreviation for creation in dict
+
+a, b = abbrs.index('Mass'), abbrs.index('Md')
+abbrs[b], abbrs[a] = abbrs[a], abbrs[b]
+
+a, b = abbrs.index('NC'), abbrs.index('Neb')
+abbrs[b], abbrs[a] = abbrs[a], abbrs[b]
+
+a, b = abbrs.index('Nev'), abbrs.index('ND')
+abbrs[b], abbrs[a] = abbrs[a], abbrs[b]
+
+a = abbrs.index('Wis')
+abbrs[a] = 'Wy'
+
+a = abbrs.index('Wash')
+abbrs[a] = 'Wis'
+
+a = abbrs.index('Vt')
+abbrs[a] = 'Wash'
+
+a = abbrs.index('VI')
+abbrs[a] = 'Vt'
+
+leg_state_dict = dict(zip(abbrs, state_strings))
+print leg_state_dict
+print len(leg_state_dict)
+
+
 
 

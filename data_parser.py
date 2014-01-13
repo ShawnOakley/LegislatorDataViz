@@ -126,4 +126,5 @@ for state in state_strings:
 			if entry["Wealth"] != 0:
 				comp_hash[state] = leg_average_hash[state] / entry['Wealth']
 
-print comp_hash
+with open('comp.json', 'w') as outfile:
+	json.dump(comp_hash, outfile)

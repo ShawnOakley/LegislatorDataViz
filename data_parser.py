@@ -106,6 +106,16 @@ for entry in leg_wealth:
 			leg_wealth_hash[leg_state_dict[hit.group(0)[3:-1]]] += float(entry['AvgValue'])
 			# leg_wealth_hash[leg_state_dict[hit.group(0)[3:-1]]] += float(entry['MaxValue'])
 			leg_number_hash[leg_state_dict[hit.group(0)[3:-1]]] += 1
+			# if str(entry['Wealth']) != '—':
+			# 	print entry["Wealth"]
+			# else:
+			# 	print 'NA'
+	# if isinstance(pop_wealth_df[pop_wealth_df['State'] == state]['Per Capita Net Wealth'], str):
+	# 	print 'NA'
+	# else:
+	# 	print pop_wealth_df[pop_wealth_df['State'] == state]['Per Capita Net Wealth']
+	# 	print type(pop_wealth_df[pop_wealth_df['State'] == state]['Per Capita Net Wealth'])
+# 	comp_hash[state] = leg_average_hash[state] / pop_wealth_df[pop_wealth_df['State'] == state]['Per Capita Net Wealth']
 
 # print leg_wealth_hash
 # print leg_number_hash

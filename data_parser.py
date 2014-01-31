@@ -5,6 +5,7 @@ import re
 import unicodedata
 import numpy as np
 import scipy.sparse as sparse
+import csv
 
 with open('pop_wealth_2010.json', 'r') as f:
      read_data = f.read()
@@ -136,5 +137,9 @@ for state in state_strings:
 			if entry["Wealth"] != 0:
 				comp_hash[state] = leg_average_hash[state] / entry['Wealth']
 
-with open('comp.json', 'w') as outfile:
-	json.dump(comp_hash, outfile)
+# with open('comp.json', 'w') as outfile:
+# 	json.dump(comp_hash, outfile)
+
+writer = csv.writer(open('comp.csv', 'wb'))
+for key, value in comp_hash.items():
+   writer.writerow([key, value])

@@ -1,96 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-        <head>
-                <meta charset="utf-8">
-                <title>D3: Setting path fills dynamically to generate a continuous range of color values for each state</title>
-                <script type="text/javascript" src="d3.min.js"></script>
-                <script type="text/javascript" src="colorbrewer.js"></script>
-                <style type="text/css">
-                        /* No style rules here yet */                
-                </style>
-        </head>
-        <body>
-                <script type="text/javascript">
+  <head>
+    <meta charset="utf-8">
+      <title>
+      A Comparison of Average Legislator Wealth to State per Capita Wealth, by State           
+      </title>
+      <script type="text/javascript" src="d3.min.js"></script>
+      <script type="text/javascript" src="colorbrewer.js"></script>
+      <style type="text/css">
+          /* No style rules here yet */               
+      </style>
+  </head>
+<body>
 
-                        // Width and height
-                        var w = 1500;
-                        var h = 900;
-
+<script type="text/javascript">
+  // Width and height
+  var w = 1500;
+  var h = 900;
   
-                        // Create SVG element
-                        var svg = d3.select("body")
-                                    .append("svg")
-                                    .attr("width", w)
-                                    .attr("height", h);
+  // Create SVG element
+  var svg = d3.select("body")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h);
                         
 
-                        //Load in comparison data
-                        d3.json("comp.json", function(data) {
+  //Load in comparison data
+  d3.json("comp.json", function(data) {
 
-                                                  // Define quantize scale to sort data values into buckets of color
-                              var color = d3.scale.linear()
-                                            .domain([5,350])
-                                            .range(["red", "blue"])
-                                            .interpolate(d3.interpolateLab);
-                                                                // Colors taken from colorbrewer.js, included in the D3 download
-                                    console.log(color(10))
-                                 //Set input domain for color scale
-                                // color.domain([
-                                //         d3.min(data, function(d) { return d.value; }), 
-                                //         d3.max(data, function(d) { return d.value; })
-                                // ]);
-                                // Load in GeoJSON data
-                                d3.json("us-states.json", function(json) {
+  // Define quantize scale to sort data values into buckets of color
+    var color = d3.scale.linear()
+                        .domain([5,350])
+                        .range(["red", "blue"])
+                        .interpolate(d3.interpolateLab);
+  // Colors taken from colorbrewer.js, included in the D3 download
+    console.log(color(10))
+  //Set input domain for color scale
+  // color.domain([
+  //         d3.min(data, function(d) { return d.value; }), 
+  //         d3.max(data, function(d) { return d.value; })
+  // ]);
+  // Load in GeoJSON data
+    d3.json("us-states.json", function(json) {
+  // Define map projection
+    var projection = d3.geo.albersUsa()
+                            .translate([w/2, h/2])
+                            .scale([1500]);
 
-
-                      // Define map projection
-                        var projection = d3.geo.albersUsa()
-                                               .translate([w/2, h/2])
-                                               .scale([1500]);
-
-                        // Define path generator
-                        var path = d3.geo.path()
-                                         .projection(projection);
-                                  // Merge the ag. data and GeoJSON
-                                  // Loop through once for each ag. data value
-                                  for (var j = 0; j < json.features.length; j++) {
-
-                                      // Grab state name
-                                      var jsonState = json.features[j].properties.name;
-
-                                      //Find the corresponding state inside the dataJson
-                                      // var dataState = jsonState;
-
-                                            // Grab data value
-                                            var dataValue = parseInt(data[jsonState]);
-                            
-                                            // Copy the data value into the JSON
-                                            json.features[j].properties.value = dataValue;
-                                            stateColor = color(dataValue);
-                                            // console.log(dataValue)
-                                            // console.log(stateColor)
-                                            // }                
-                                        //Bind data and create one path per GeoJSON feature
-                                        // console.log(path)
-                                          
-                                        svg.selectAll("path")
-                                           .data(json.features)
-                                           .enter()
-                                           .append('path')
-                                           .attr("d", path)
-                                           .style("fill", function(d){
-                                              console.log(color(d.properties.value))
-                                              return color(d.properties.value)
-                                          });
-                                        //    .append("path")
-                                        //    .attr("d", path)
-                                        //    .attr("fill", function(d){color(dataValue)})
-                                         }
+  // Define path generator
+    var path = d3.geo.path()
+                      .projection(projection);
+  // Merge the ag. data and GeoJSON
+  // Loop through once for each ag. data value
+    for (var j = 0; j < json.features.length; j++) {
+  // Grab state name
+      var jsonState = json.features[j].properties.name;
+  //Find the corresponding state inside the dataJson
+  // var dataState = jsonState;
+  // Grab data value
+      var dataValue = parseInt(data[jsonState]);
+  // Copy the data value into the JSON
+      json.features[j].properties.value = dataValue;
+      stateColor = color(dataValue);
+  // console.log(dataValue)
+  // console.log(stateColor)
+  // }                
+  //Bind data and create one path per GeoJSON feature
+  // console.log(path)
+      svg.selectAll("path")
+          .data(json.features)
+          .enter()
+          .append('path')
+          .attr("d", path)
+          .style("fill", function(d){
+            console.log(color(d.properties.value))
+            return color(d.properties.value)
+            });
+  //    .append("path")
+  //    .attr("d", path)
+  //    .attr("fill", function(d){color(dataValue)})                                       }
+        });
                         
-                                });
-                        
-                        });
-                        
-                </script>
-        </body>
+      });                    
+    </script>
+  </body>
 </html>
